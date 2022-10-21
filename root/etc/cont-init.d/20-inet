@@ -2,6 +2,7 @@
 
 network_found=false
 iface=${INTERFACE:-eth0}
+skip_iface=${SKIP_INTERFACE}
 interfaces=($(ip link | awk -F': ' '$0 !~ "lo|wg|tun|tap|^[^0-9]"{print $2;getline}' | cut -d@ -f1))
 if [[ ! " ${interfaces[*]} " =~ " $iface " ]]; then
     interfaces+=("$iface")
@@ -18,9 +19,14 @@ for interface in "${interfaces[@]}"; do
   echo "[$(date -Iseconds)] Enabling connection to ${interface} ${inet}"
   iptables -A INPUT -i "$interface" -s "${inet}" -j ACCEPT
   iptables -A OUTPUT -o "$interface" -d "${inet}" -j ACCEPT
+  network_found=true
+
+  if [ "$skip_iface" == "$interface" ]; then
+    continue
+  fi
+
   iptables -A FORWARD -i "$interface" -d "${inet}" -j ACCEPT
   iptables -A FORWARD -i "$interface" -s "${inet}" -j ACCEPT
-  network_found=true
 done
 
 if [ "$network_found" = false ]; then

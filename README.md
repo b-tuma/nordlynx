@@ -125,6 +125,7 @@ Wireguard module is required, please install it [manually](https://www.wireguard
 |               `NET6_LOCAL`               |                                                                                                                               | CIDR IPv6 networks (IE fe00:d34d:b33f::/64), add a route to allows replies once the VPN is up.
 |               `RECONNECT`                |                                                                                                                               | Time in seconds to re-establish the connection.
 |                   `TZ`                   |                                                              UTC                                                              | Specify a timezone to use EG Europe/London.
+|                   `SKIP_INTERFACE`                   |                 | Skip forwarding rules for this interface on startup.
 
 ## Sysctl
 
